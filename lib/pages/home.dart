@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'dart:async';
 
 class Home extends StatefulWidget {
   @override
@@ -11,11 +12,15 @@ class Home extends StatefulWidget {
 class HomeState extends State<Home> {
 
   Map data = {};
-  String onOrOff = "OFF";
+  String onOrOff = "off";
 
 
   bool newStatus = false;
   String ledValue = "0";
+
+  Future sleep1() {
+    return new Future.delayed(const Duration(seconds: 2));
+  }
 
   void toggleSwitch(switchStatus){
     setState(() {
@@ -29,13 +34,15 @@ class HomeState extends State<Home> {
         ledValue = "0";
       };
     });
+    sleep1();
     var client = http.Client();
     try {
       var url = 'https://node-red-pritesh.eu-gb.mybluemix.net/LED-$onOrOff';
       client.post(url, body: json.encode({'msg.payload': ledValue}),
           headers: {'Content-type':'application/json'}).then((response){
 //            print('msg.payload: ${newStatus.toString()}');
-        print('msg.payload: $ledValue');
+            print('msg.payload: $ledValue');
+            print('URL: $url');
       });
     }
     catch(e) {

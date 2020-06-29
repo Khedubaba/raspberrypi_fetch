@@ -10,8 +10,10 @@ class GetRaspberryData{
   Future<void> getTemperature() async {
     try {
       //make the request
+//      print("URL: $url");
       Response response = await get('http://node-red-pritesh.eu-gb.mybluemix.net/$url');
       Map data = jsonDecode(response.body);
+//      print(data);
 
       //get properties from data
       currentTemp = data['Current Temperature'];

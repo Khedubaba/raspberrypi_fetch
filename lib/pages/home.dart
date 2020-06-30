@@ -1,7 +1,6 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'dart:convert';
+import 'dart:convert' show jsonDecode;
 import 'dart:async';
 
 class Home extends StatefulWidget {
@@ -10,6 +9,8 @@ class Home extends StatefulWidget {
 }
 
 class HomeState extends State<Home> {
+  String onUrl = 'https://node-red-pritesh.eu-gb.mybluemix.net/LED-on';
+  String offUrl = 'https://node-red-pritesh.eu-gb.mybluemix.net/LED-off';
 
   Map data = {};
   String onOrOff = "off";
@@ -18,9 +19,23 @@ class HomeState extends State<Home> {
   bool newStatus = false;
   String ledValue = "0";
 
-  Future sleep1() {
-    return new Future.delayed(const Duration(seconds: 2));
+  Future<String> onRequest() async {
+    var response = await http
+        .get(Uri.encodeFull(onUrl), headers: {"Accept": "application/json"});
+
+    print("Called On Request");
   }
+
+  Future<String> offRequest() async {
+    var response = await http
+        .get(Uri.encodeFull(offUrl), headers: {"Accept": "application/json"});
+
+    print("Called On Request");
+  }
+
+//  Future sleep1() {
+//    return new Future.delayed(const Duration(seconds: 2));
+//  }
 
   void toggleSwitch(switchStatus){
     setState(() {
@@ -28,26 +43,28 @@ class HomeState extends State<Home> {
       if (newStatus){
         onOrOff = "on";
         ledValue = "1";
+        onRequest();
       }
       else{
         onOrOff = "off";
         ledValue = "0";
+        offRequest();
       };
     });
-    sleep1();
-    var client = http.Client();
-    try {
-      var url = 'https://node-red-pritesh.eu-gb.mybluemix.net/LED-$onOrOff';
-      client.post(url, body: json.encode({'msg.payload': ledValue}),
-          headers: {'Content-type':'application/json'}).then((response){
-//            print('msg.payload: ${newStatus.toString()}');
-            print('msg.payload: $ledValue');
-            print('URL: $url');
-      });
-    }
-    catch(e) {
-      print(e.message);
-    }
+//    sleep1();
+//    var client = http.Client();
+//    try {
+//      var url = 'https://node-red-pritesh.eu-gb.mybluemix.net/LED-$onOrOff';
+//      client.post(url, body: json.encode({'msg.payload': ledValue}),
+//          headers: {'Content-type':'application/json'}).then((response){
+////            print('msg.payload: ${newStatus.toString()}');
+//            print('msg.payload: $ledValue');
+//            print('URL: $url');
+//      });
+//    }
+//    catch(e) {
+//      print(e.message);
+//    }
   }
 
   @override

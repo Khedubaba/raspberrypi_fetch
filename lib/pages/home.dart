@@ -23,14 +23,14 @@ class HomeState extends State<Home> {
     var response = await http
         .get(Uri.encodeFull(onUrl), headers: {"Accept": "application/json"});
 
-    print("Called On Request");
+    print("Called On Request: " + response.toString());
   }
 
   Future<String> offRequest() async {
     var response = await http
         .get(Uri.encodeFull(offUrl), headers: {"Accept": "application/json"});
 
-    print("Called On Request");
+    print("Called Off Request: " + response.toString());
   }
 
 //  Future sleep1() {
